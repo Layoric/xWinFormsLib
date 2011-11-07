@@ -1,0 +1,10 @@
+
+xWinForms/bin/*
+xWinForms/Content/obj/*
+xWinForms/obj/*
+xWinFormsLib/obj/*
+xWinFormsLib/bin/*
+xWinFormsLib/Content/obj/*
+*.db
+*.user
+*.cachefile
