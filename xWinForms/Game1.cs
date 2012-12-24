@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -60,14 +62,27 @@ namespace xWinForms
             // TODO: use this.Content to load your game content here            
 
             // Create the formCollection, where all our forms will reside
-            formCollection = new FormCollection(this.Window, Services, ref graphics);
+            formCollection = new FormCollection(Window, Services, ref graphics);
 
             // Modify Game's Form (this.Window)
             //FormCollection.Window.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             //FormCollection.Window.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             //FormCollection.Window.MaximizeBox = true;
             //FormCollection.Window.MinimizeBox = true;
+            var fs = new FileStream("Markup/xWinFormsExample.xml", FileMode.Open, FileAccess.Read);
+            var doc = XDocument.Load(fs);
+            TimeSpan ts = new TimeSpan();
+            TimeSpan programatic = new TimeSpan();
+            DateTime start = DateTime.Now;
+            formCollection.GenerateFromMarkup(doc);
+            
 
+
+
+            formCollection["myForm"].Show();
+            ts = DateTime.Now - start;
+
+            start = DateTime.Now;
             #region Form #1
 
             //Create a new form
@@ -84,17 +99,17 @@ namespace xWinForms
             formCollection["form1"].Controls.Add(new Button("btRemove", new Vector2(15, 320), 60, "Remove Listbox Item", Color.White, Color.Black));
             formCollection["form1"]["btRemove"].OnPress += Remove_OnPress;
 
-            //Add a Button Row
-            formCollection["form1"].Controls.Add(new ButtonRow("buttonRow1", new Vector2(15, 80), 250, new string[] { "RowButton1", "RowButton2", "RowButton3" }, Color.White, Color.Black));
-            formCollection["form1"]["buttonRow1"].OnRelease = ButtonRow1_OnRelease;
+            ////Add a Button Row
+            //formCollection["form1"].Controls.Add(new ButtonRow("buttonRow1", new Vector2(15, 80), 250, new string[] { "RowButton1", "RowButton2", "RowButton3" }, Color.White, Color.Black));
+            //formCollection["form1"]["buttonRow1"].OnRelease = ButtonRow1_OnRelease;
 
-            //Add a Checkbox
-            formCollection["form1"].Controls.Add(new Checkbox("checkbox1", new Vector2(15, 110), "Checkbox", true));
-            formCollection["form1"]["checkbox1"].OnRelease = Checkbox1_OnRelease;
+            ////Add a Checkbox
+            //formCollection["form1"].Controls.Add(new Checkbox("checkbox1", new Vector2(15, 110), "Checkbox", true));
+            //formCollection["form1"]["checkbox1"].OnRelease = Checkbox1_OnRelease;
 
-            //Add a RadioButton
-            formCollection["form1"].Controls.Add(new RadioButton("radiobutton1", new Vector2(170, 55), "RadioButton", true));
-            formCollection["form1"]["radiobutton1"].OnRelease = Radiobutton1_OnRelease;
+            ////Add a RadioButton
+            //formCollection["form1"].Controls.Add(new RadioButton("radiobutton1", new Vector2(170, 55), "RadioButton", true));
+            //formCollection["form1"]["radiobutton1"].OnRelease = Radiobutton1_OnRelease;
 
             //Add a Label
             formCollection["form1"].Controls.Add(new Label("label1", new Vector2(15, 135), "Label #1", Color.White, Color.Black, 70, Label.Align.Left));
@@ -103,96 +118,97 @@ namespace xWinForms
             formCollection["form1"]["label1"].OnPress = Label1_OnPress;
             formCollection["form1"]["label1"].OnRelease = Label1_OnRelease;
 
-            //Add a PictureBox
-            formCollection["form1"].Controls.Add(new PictureBox("picturebox1", new Vector2(15, 160), @"textures\xna_logo", 1));
-            formCollection["form1"]["picturebox1"].OnMouseOver = PictureBox1_MouseOver;
-            formCollection["form1"]["picturebox1"].OnMouseOut = PictureBox1_MouseOut;
-            formCollection["form1"]["picturebox1"].OnPress = PictureBox1_OnPress;
-            formCollection["form1"]["picturebox1"].OnRelease = PictureBox1_OnRelease;
+            ////Add a PictureBox
+            //formCollection["form1"].Controls.Add(new PictureBox("picturebox1", new Vector2(15, 160), @"textures\xna_logo", 1));
+            //formCollection["form1"]["picturebox1"].OnMouseOver = PictureBox1_MouseOver;
+            //formCollection["form1"]["picturebox1"].OnMouseOut = PictureBox1_MouseOut;
+            //formCollection["form1"]["picturebox1"].OnPress = PictureBox1_OnPress;
+            //formCollection["form1"]["picturebox1"].OnRelease = PictureBox1_OnRelease;
 
-            //Add a CheckboxGroup
-            formCollection["form1"].Controls.Add(new CheckboxGroup("checkboxgroup1", new Checkbox[] { 
-                new Checkbox("group1check1", new Vector2(165, 130), "Group Check #1", true),
-                new Checkbox("group1check2", new Vector2(165, 150), "Group Check #2", false),
-                new Checkbox("group1check3", new Vector2(165, 170), "Group Check #3", false),
-                new Checkbox("group1check4", new Vector2(165, 190), "Group Check #4", false),
-                new Checkbox("group1check5", new Vector2(165, 210), "Group Check #5", false)}));
-            ((CheckboxGroup)formCollection["form1"]["checkboxgroup1"]).OnChangeSelection = CheckboxGroup1_ChangeSelection;
+            ////Add a CheckboxGroup
+            //formCollection["form1"].Controls.Add(new CheckboxGroup("checkboxgroup1", new Checkbox[] { 
+            //    new Checkbox("group1check1", new Vector2(165, 130), "Group Check #1", true),
+            //    new Checkbox("group1check2", new Vector2(165, 150), "Group Check #2", false),
+            //    new Checkbox("group1check3", new Vector2(165, 170), "Group Check #3", false),
+            //    new Checkbox("group1check4", new Vector2(165, 190), "Group Check #4", false),
+            //    new Checkbox("group1check5", new Vector2(165, 210), "Group Check #5", false)}));
+            //((CheckboxGroup)formCollection["form1"]["checkboxgroup1"]).OnChangeSelection = CheckboxGroup1_ChangeSelection;
 
-            //Add a RadioButtonGroup
-            formCollection["form1"].Controls.Add(new RadiuButtonGroup("radiobuttongroup1", new RadioButton[] { 
-                new RadioButton("group1check1", new Vector2(310, 280), "RadioButton #1", true),
-                new RadioButton("group1check2", new Vector2(310, 300), "RadioButton #2", false),
-                new RadioButton("group1check3", new Vector2(310, 320), "RadioButton #3", false),
-                new RadioButton("group1check4", new Vector2(310, 340), "RadioButton #4", false),
-                new RadioButton("group1check5", new Vector2(310, 360), "RadioButton #5", false)}));
-            ((RadiuButtonGroup)formCollection["form1"]["radiobuttongroup1"]).OnChangeSelection = RadioButtonGroup1_ChangeSelection;
+            ////Add a RadioButtonGroup
+            //formCollection["form1"].Controls.Add(new RadiuButtonGroup("radiobuttongroup1", new RadioButton[] { 
+            //    new RadioButton("group1check1", new Vector2(310, 280), "RadioButton #1", true),
+            //    new RadioButton("group1check2", new Vector2(310, 300), "RadioButton #2", false),
+            //    new RadioButton("group1check3", new Vector2(310, 320), "RadioButton #3", false),
+            //    new RadioButton("group1check4", new Vector2(310, 340), "RadioButton #4", false),
+            //    new RadioButton("group1check5", new Vector2(310, 360), "RadioButton #5", false)}));
+            //((RadiuButtonGroup)formCollection["form1"]["radiobuttongroup1"]).OnChangeSelection = RadioButtonGroup1_ChangeSelection;
 
-            //Add a ButtonGroup
-            formCollection["form1"].Controls.Add(new ButtonGroup("buttongroup1", new Button[] { 
-                new Button("group2button1", new Vector2(165, 250), "Group Button #1", Color.White, Color.Black),
-                new Button("group2button2", new Vector2(165, 275), "Group Button #2", Color.White, Color.Black),
-                new Button("group2button3", new Vector2(165, 300), "Group Button #3", Color.White, Color.Black),
-                new Button("group2button4", new Vector2(165, 325), "Group Button #4", Color.White, Color.Black),
-                new Button("group2button5", new Vector2(165, 350), "Group Button #5", Color.White, Color.Black)}));
-            ((ButtonGroup)formCollection["form1"]["buttongroup1"]).OnChangeSelection = ButtonGroup1_ChangeSelection;
+            ////Add a ButtonGroup
+            //formCollection["form1"].Controls.Add(new ButtonGroup("buttongroup1", new Button[] { 
+            //    new Button("group2button1", new Vector2(165, 250), "Group Button #1", Color.White, Color.Black),
+            //    new Button("group2button2", new Vector2(165, 275), "Group Button #2", Color.White, Color.Black),
+            //    new Button("group2button3", new Vector2(165, 300), "Group Button #3", Color.White, Color.Black),
+            //    new Button("group2button4", new Vector2(165, 325), "Group Button #4", Color.White, Color.Black),
+            //    new Button("group2button5", new Vector2(165, 350), "Group Button #5", Color.White, Color.Black)}));
+            //((ButtonGroup)formCollection["form1"]["buttongroup1"]).OnChangeSelection = ButtonGroup1_ChangeSelection;
 
             //Add a multiline Textbox
             formCollection["form1"].Controls.Add(new Textbox("textbox1", new Vector2(310, 50), 130, 80, "This is a test"));
             ((Textbox)formCollection["form1"]["textbox1"]).Scrollbar = Textbox.Scrollbars.Both;
 
-            //Add a Listbox
-            formCollection["form1"].Controls.Add(new Listbox("listbox1", new Vector2(310, 150), 130, 120,
-                new string[] { "This is item #1 from the listbox", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9", "Item10" }));
-            ((Listbox)formCollection["form1"]["listbox1"]).HorizontalScrollbar = true;
+            ////Add a Listbox
+            //formCollection["form1"].Controls.Add(new Listbox("listbox1", new Vector2(310, 150), 130, 120,
+            //    new string[] { "This is item #1 from the listbox", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9", "Item10" }));
+            //((Listbox)formCollection["form1"]["listbox1"]).HorizontalScrollbar = true;
 
-            //Add a menu to the form
-            //Note: inverted process, first create a submenu then add it when creating the menuItem
-            #region Form1 Menu
+            ////Add a menu to the form
+            ////Note: inverted process, first create a submenu then add it when creating the menuItem
+            //#region Form1 Menu
 
-            SubMenu mnuFile = new SubMenu(formCollection["form1"]);
-            mnuFile.Add(new MenuItem("mnuFileClose", "&Close", Form1_mnuFileClose), null);
-            mnuFile.Add(new MenuItem("", "-", Form1_mnuFileClose), null);
-            mnuFile.Add(new MenuItem("mnuFileExit", "E&xit", Form1_mnuFileExit), null);
+            //SubMenu mnuFile = new SubMenu(formCollection["form1"]);
+            //mnuFile.Add(new MenuItem("mnuFileClose", "&Close", Form1_mnuFileClose), null);
+            //mnuFile.Add(new MenuItem("", "-", Form1_mnuFileClose), null);
+            //mnuFile.Add(new MenuItem("mnuFileExit", "E&xit", Form1_mnuFileExit), null);
 
-            SubMenu mnuView = new SubMenu(formCollection["form1"]);
-            mnuView.Add(new MenuItem("mnuViewToggleFS", "&Toggle Fullscreen", Form1_mnuViewToggleFS), null);
+            //SubMenu mnuView = new SubMenu(formCollection["form1"]);
+            //mnuView.Add(new MenuItem("mnuViewToggleFS", "&Toggle Fullscreen", Form1_mnuViewToggleFS), null);
 
-            SubMenu mnuTestSubMenu0 = new SubMenu(formCollection["form1"]);
-            mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
-            mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
+            //SubMenu mnuTestSubMenu0 = new SubMenu(formCollection["form1"]);
+            //mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
+            //mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
 
-            SubMenu mnuTestSubMenu1 = new SubMenu(formCollection["form1"]);
-            mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
-            mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
+            //SubMenu mnuTestSubMenu1 = new SubMenu(formCollection["form1"]);
+            //mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
+            //mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
 
-            SubMenu mnuTest = new SubMenu(formCollection["form1"]);
-            mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem0", null), mnuTestSubMenu0);
-            mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem1", null), mnuTestSubMenu1);
-            mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem2", null), null);
+            //SubMenu mnuTest = new SubMenu(formCollection["form1"]);
+            //mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem0", null), mnuTestSubMenu0);
+            //mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem1", null), mnuTestSubMenu1);
+            //mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem2", null), null);
 
-            formCollection["form1"].Menu = new Menu("form1Menu");
-            formCollection["form1"].Menu.Add(new MenuItem("mnuFile", "&File", null), mnuFile);
-            formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&View", null), mnuView);
-            formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&Test", null), mnuTest);
+            //formCollection["form1"].Menu = new Menu("form1Menu");
+            //formCollection["form1"].Menu.Add(new MenuItem("mnuFile", "&File", null), mnuFile);
+            //formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&View", null), mnuView);
+            //formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&Test", null), mnuTest);
 
-            #endregion
+            //#endregion
 
-            //Add a ProgressBar
-            formCollection["form1"].Controls.Add(new Progressbar("progressbar1", new Vector2(15, 295), 125, 15, true));
+            ////Add a ProgressBar
+            //formCollection["form1"].Controls.Add(new Progressbar("progressbar1", new Vector2(15, 295), 125, 15, true));
 
-            //Add a Potentiometer
-            formCollection["form1"].Controls.Add(new Potentiometer("potentiometer1", new Vector2(120, 135)));
-            ((Potentiometer)formCollection["form1"]["potentiometer1"]).OnChangeValue = Potentiometer_OnChangeValue;
+            ////Add a Potentiometer
+            //formCollection["form1"].Controls.Add(new Potentiometer("potentiometer1", new Vector2(120, 135)));
+            //((Potentiometer)formCollection["form1"]["potentiometer1"]).OnChangeValue = Potentiometer_OnChangeValue;
 
-            formCollection["form1"].Controls.Add(new ComboBox("combo1", new Vector2(450, 50), 120, new string[] { "Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8" }));
-            formCollection["form1"]["combo1"].FontName = "pescadero9b";
+            //formCollection["form1"].Controls.Add(new ComboBox("combo1", new Vector2(450, 50), 120, new string[] { "Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8" }));
+            //formCollection["form1"]["combo1"].FontName = "pescadero9b";
 
             formCollection["form1"].Controls.Add(new Button("btAdd", new Vector2(440, 100), "Add to Listbox", Color.White, Color.Black));
             formCollection["form1"]["btAdd"].OnPress = Button1_OnPress;
 
             ////Show the form
             formCollection["form1"].Show();
+            programatic = DateTime.Now - start;
 
             #endregion
 
@@ -280,7 +296,8 @@ namespace xWinForms
             //frmDebug.WriteLine("line #2");
 
             //white corner bug for some reason if not focused.. NEED TO FIX
-            formCollection["form1"].Focus();
+            formCollection["myForm"].Show();
+            formCollection["myForm"].Focus();
         }
 
         /// <summary>

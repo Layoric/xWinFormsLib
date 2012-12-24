@@ -1,10 +1,10 @@
 ﻿/*
 xWinForms © 2007-2009
 Eric Grossinger - ericgrossinger@gmail.com
+Edited 24/12/2012 - layoric@gmail.com
 */
 using System;
 using System.Collections.Generic;
-using System.Text;
 using WinForms = System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,50 +14,43 @@ namespace xWinFormsLib
 {
     public class FormCollection
     {
-        static IServiceProvider services;
-        static GraphicsDeviceManager graphics;
-
-        static private List<Form> forms = new List<Form>();
-        static private Form activeForm = null;
-        static private Form topMostForm = null;
+        static private List<Form> _forms = new List<Form>();
+        static private Form _activeForm;
+        static private Form _topMostForm;
         //static bool hasMaximizedForm = false;
 
         //static private Menu menu = null;
-        static private SubMenu contextMenu = null;
-        static private ContentManager contentManager;
-        static private SpriteBatch spriteBatch;
+        static private readonly SubMenu ContextMenu = null;
+        static private SpriteBatch _spriteBatch;
 
-        static private MouseCursor cursor;
-        static bool isCursorVisible = true;
+        static private MouseCursor _cursor;
+        static bool _isCursorVisible = true;
 
-        static Label tooltip = new Label("tooltip", Vector2.Zero, "", Color.Beige, Color.Black, 200, Label.Align.Left);
+        static Label _tooltip = new Label("tooltip", Vector2.Zero, "", Color.Beige, Color.Black, 200, Label.Align.Left);
 
-        static bool snapping = true;
-        static Vector2 snapSize = new Vector2(10f, 10f);
-
-        static public IServiceProvider Services { get { return services; } }
-        static public GraphicsDeviceManager Graphics { get { return graphics; } }
-        static public ContentManager ContentManager { get { return contentManager; } }
-        static public List<Form> Forms { get { return forms; } set { forms = value; } }
-        static public Form ActiveForm { get { return activeForm; } set { activeForm = value; } }
-        static public Form TopMostForm { get { return topMostForm; } set { topMostForm = value; } }
-        static public MouseCursor Cursor { get { return cursor; } set { cursor = value; } }
-        static public bool IsCursorVisible { get { return isCursorVisible; } set { isCursorVisible = value; } }
-        static public Label Tooltip { get { return tooltip; } set { tooltip = value; } }
+        public static IServiceProvider Services { get; private set; }
+        public static GraphicsDeviceManager Graphics { get; private set; }
+        public static ContentManager ContentManager { get; private set; }
+        static public List<Form> Forms { get { return _forms; } set { _forms = value; } }
+        static public Form ActiveForm { get { return _activeForm; } set { _activeForm = value; } }
+        static public Form TopMostForm { get { return _topMostForm; } set { _topMostForm = value; } }
+        static public MouseCursor Cursor { get { return _cursor; } set { _cursor = value; } }
+        static public bool IsCursorVisible { get { return _isCursorVisible; } set { _isCursorVisible = value; } }
+        static public Label Tooltip { get { return _tooltip; } set { _tooltip = value; } }
         //static public Menu Menu { get { return menu; } set { menu = value; } }
-        static public bool Snapping { get { return snapping; } set { snapping = value; } }
-        static public Vector2 SnapSize { get { return snapSize; } set { snapSize = value; } }
+        public static bool Snapping { get; set; }
+        public static Vector2 SnapSize { get; set; }
 
-        private static WinForms.Form window;
-        public static WinForms.Form Window { get { return window; } set { window = value; } }
+        private static WinForms.Form _window;
+        public static WinForms.Form Window { get { return _window; } set { _window = value; } }
 
         public static int Count
         {
             get
             {
                 int count = 0;
-                for (int i = 0; i < forms.Count; i++)
-                    if (!forms[i].IsDisposed && forms[i].Visible)
+                for (int i = 0; i < _forms.Count; i++)
+                    if (!_forms[i].IsDisposed && _forms[i].Visible)
                         count++;
                 return count;
             }
@@ -65,20 +58,20 @@ namespace xWinFormsLib
 
         public FormCollection(GameWindow window, IServiceProvider services, ref GraphicsDeviceManager graphics)
         {
-            FormCollection.window = (WinForms.Form)WinForms.Form.FromHandle(window.Handle);
-            FormCollection.window.SizeChanged += Form_SizeChanged;
+            _window = (WinForms.Form)WinForms.Control.FromHandle(window.Handle);
+            _window.SizeChanged += Form_SizeChanged;
             
-            FormCollection.services = services;
-            FormCollection.graphics = graphics;
+            Services = services;
+            Graphics = graphics;
 
-            contentManager = new ContentManager(services, "Content");
-            spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+            ContentManager = new ContentManager(services, "Content");
+            _spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
-            cursor = new MouseCursor(false, true, contentManager);
+            _cursor = new MouseCursor(false, true, ContentManager);
 
-            tooltip.Font = contentManager.Load<SpriteFont>(@"fonts\pescadero9");
-            tooltip.Initialize(contentManager, graphics.GraphicsDevice);
-            tooltip.Visible = false;
+            _tooltip.Font = ContentManager.Load<SpriteFont>(@"fonts\pescadero9");
+            _tooltip.Initialize(ContentManager, graphics.GraphicsDevice);
+            _tooltip.Visible = false;
 
             //contextMenu = new SubMenu(null);
             //contextMenu.Add(new MenuItem("mnuRestore", "Restore", null), null);
@@ -88,6 +81,12 @@ namespace xWinFormsLib
             //contextMenu.Add(new MenuItem("mnuRestore", "Close", null), null);
         }
 
+        static FormCollection()
+        {
+            SnapSize = new Vector2(10f, 10f);
+            Snapping = true;
+        }
+
         /// <summary>
         /// Returns a form by index
         /// </summary>
@@ -95,8 +94,8 @@ namespace xWinFormsLib
         /// <returns></returns>
         public Form this[int index]
         {
-            get { return forms[index]; }
-            set { forms[index] = value; }
+            get { return _forms[index]; }
+            set { _forms[index] = value; }
         }
         /// <summary>
         /// Returns a form by name
@@ -107,27 +106,27 @@ namespace xWinFormsLib
         {
             get
             {
-                for (int i = 0; i < forms.Count; i++)
-                    if (forms[i].Name == name)
-                        return forms[i];
+                for (int i = 0; i < _forms.Count; i++)
+                    if (_forms[i].Name == name)
+                        return _forms[i];
 
                 return null;
             }
             set
             {
-                for (int i = 0; i < forms.Count; i++)
-                    if (forms[i].Name == name)
+                for (int i = 0; i < _forms.Count; i++)
+                    if (_forms[i].Name == name)
                     {
-                        forms[i] = value;
+                        _forms[i] = value;
                         break;
                     }
             }
         }
         static public Form Form(string name)
         {
-            for (int i = 0; i < forms.Count; i++)
-                if (forms[i].Name == name)
-                    return forms[i];
+            for (int i = 0; i < _forms.Count; i++)
+                if (_forms[i].Name == name)
+                    return _forms[i];
 
             return null;
         }
@@ -138,7 +137,7 @@ namespace xWinFormsLib
         /// <param name="form">Form</param>
         public void Add(Form form)
         {            
-            forms.Insert(0, form);
+            _forms.Insert(0, form);
             //topMostForm = form;
             //form.Focus();
             //form.Update(null);
@@ -150,7 +149,7 @@ namespace xWinFormsLib
         public void Remove(Form form)
         {
             form.Dispose();
-            forms.Remove(form);
+            _forms.Remove(form);
         }
         /// <summary>
         /// Remove a form by name
@@ -158,11 +157,11 @@ namespace xWinFormsLib
         /// <param name="name">Form name</param>
         public void Remove(string name)
         {
-            for (int i = 0; i < forms.Count; i++)
-                if (forms[i].Name == name)
+            for (int i = 0; i < _forms.Count; i++)
+                if (_forms[i].Name == name)
                 {
-                    forms[i].Dispose();
-                    forms.RemoveAt(i);
+                    _forms[i].Dispose();
+                    _forms.RemoveAt(i);
                     break;
                 }
 
@@ -173,17 +172,17 @@ namespace xWinFormsLib
         /// </summary>
         public void Dispose()
         {
-            for (int i = forms.Count - 1; i > -1; i--)
-                forms[i].Dispose();
+            for (int i = _forms.Count - 1; i > -1; i--)
+                _forms[i].Dispose();
 
-            forms.Clear();
+            _forms.Clear();
 
             //if (menu != null)
             //    menu.Dispose();
 
-            tooltip.Dispose();
-            cursor.Dispose();
-            contentManager.Dispose();                        
+            _tooltip.Dispose();
+            _cursor.Dispose();
+            ContentManager.Dispose();                        
         }
 
         /// <summary>
@@ -195,29 +194,29 @@ namespace xWinFormsLib
             MouseHelper.Update();
 
             //Update Cursor
-            cursor.Update(gameTime);
+            _cursor.Update(gameTime);
 
             //Update active or topMost form
-            if (activeForm != null)
-                activeForm.Update(gameTime);
-            else if (topMostForm != null)
-                topMostForm.Update(gameTime);
-            else if (topMostForm == null && forms.Count > 0)
+            if (_activeForm != null)
+                _activeForm.Update(gameTime);
+            else if (_topMostForm != null)
+                _topMostForm.Update(gameTime);
+            else if (_topMostForm == null && _forms.Count > 0)
             {
-                for (int i = 0; i < forms.Count; i++)
-                    if (!forms[i].IsDisposed)
+                for (int i = 0; i < _forms.Count; i++)
+                    if (!_forms[i].IsDisposed)
                     {
-                        topMostForm = forms[i];
-                        topMostForm.Focus();
+                        _topMostForm = _forms[i];
+                        _topMostForm.Focus();
                         break;
                     }
             }
 
             //Update other forms
-            for (int i = 0; i < forms.Count; i++)
-                if (!forms[i].IsDisposed && forms[i].Enabled && 
-                    forms[i] != activeForm && forms[i] != topMostForm)
-                    forms[i].Update(gameTime);
+            for (int i = 0; i < _forms.Count; i++)
+                if (!_forms[i].IsDisposed && _forms[i].Enabled && 
+                    _forms[i] != _activeForm && _forms[i] != _topMostForm)
+                    _forms[i].Update(gameTime);
 
             //Update Top Menu
             //if (activeForm == null && menu != null && menu.Visible)
@@ -225,8 +224,8 @@ namespace xWinFormsLib
             //        menu.Update(gameTime);
 
             //Update Context Menu
-            if (contextMenu != null && contextMenu.State != SubMenu.MenuState.Closed && contextMenu.Visible)
-                contextMenu.Update(gameTime);
+            if (ContextMenu != null && ContextMenu.State != SubMenu.MenuState.Closed && ContextMenu.Visible)
+                ContextMenu.Update(gameTime);
         }
 
         /// <summary>
@@ -234,7 +233,7 @@ namespace xWinFormsLib
         /// </summary>
         public void Render()
         {
-            graphics.GraphicsDevice.Clear(Color.Black);
+            Graphics.GraphicsDevice.Clear(Color.Black);
 
             //if (menu != null && !menu.IsDisposed && menu.Visible && !hasMaximizedForm)
             //    menu.Render();
@@ -242,9 +241,9 @@ namespace xWinFormsLib
             //if (contextMenu != null && !contextMenu.IsDisposed && contextMenu.Visible)
             //    contextMenu.Render();
 
-            for (int i = 0; i < forms.Count; i++)
-                if (!forms[i].IsDisposed && forms[i].Visible)
-                    forms[i].Render();
+            for (int i = 0; i < _forms.Count; i++)
+                if (!_forms[i].IsDisposed && _forms[i].Visible)
+                    _forms[i].Render();
         }
 
         /// <summary>
@@ -261,54 +260,54 @@ namespace xWinFormsLib
 
             #region Draw Forms
 
-            for (int i = forms.Count - 1; i > -1; i--)
-                if (!forms[i].IsDisposed && forms[i].Visible && forms[i] != topMostForm &&
-                    forms[i].State != xWinFormsLib.Form.WindowState.Minimized)
-                    forms[i].Draw();
+            for (int i = _forms.Count - 1; i > -1; i--)
+                if (!_forms[i].IsDisposed && _forms[i].Visible && _forms[i] != _topMostForm &&
+                    _forms[i].State != xWinFormsLib.Form.WindowState.Minimized)
+                    _forms[i].Draw();
 
-            if (topMostForm != null && !topMostForm.IsDisposed && topMostForm.Visible)
-                topMostForm.Draw();
+            if (_topMostForm != null && !_topMostForm.IsDisposed && _topMostForm.Visible)
+                _topMostForm.Draw();
 
             #endregion
 
             #region Draw Minimized Forms
-            for (int i = forms.Count - 1; i >= 0; i--)
-                if (forms[i].State == xWinFormsLib.Form.WindowState.Minimized && 
-                    !forms[i].IsDisposed && forms[i].Visible && forms[i] != topMostForm)
-                    forms[i].Draw();
+            for (int i = _forms.Count - 1; i >= 0; i--)
+                if (_forms[i].State == xWinFormsLib.Form.WindowState.Minimized && 
+                    !_forms[i].IsDisposed && _forms[i].Visible && _forms[i] != _topMostForm)
+                    _forms[i].Draw();
             #endregion
 
             #region Draw Context Menu
-            if (contextMenu != null && !contextMenu.IsDisposed && contextMenu.Visible && contextMenu.State != SubMenu.MenuState.Closed)
+            if (ContextMenu != null && !ContextMenu.IsDisposed && ContextMenu.Visible && ContextMenu.State != SubMenu.MenuState.Closed)
             {
-                spriteBatch.Begin(SpriteSortMode.Texture, null);
-                contextMenu.Draw(spriteBatch);
-                spriteBatch.End();
+                _spriteBatch.Begin(SpriteSortMode.Texture, null);
+                ContextMenu.Draw(_spriteBatch);
+                _spriteBatch.End();
             }
             #endregion
 
             #region Draw Cursor
-            if (isCursorVisible)
-                cursor.Draw();
+            if (_isCursorVisible)
+                _cursor.Draw();
             #endregion
         }
 
         public static Nullable<Vector2> GetMinimizedPosition(Form form)
         {
-            for (int i = 0; i < forms.Count; i++)
-                if (forms[i] != form && forms[i].IsMinimizing)
+            for (int i = 0; i < _forms.Count; i++)
+                if (_forms[i] != form && _forms[i].IsMinimizing)
                     return null;
 
             //using MinimumSize from the Form Class (100 by 40)
-            for (int y = graphics.GraphicsDevice.Viewport.Height - 20; y > 0; y -= 20)
+            for (int y = Graphics.GraphicsDevice.Viewport.Height - 20; y > 0; y -= 20)
             {
-                for (int x = 0; x < graphics.GraphicsDevice.Viewport.Width - 99; x += 100)
+                for (int x = 0; x < Graphics.GraphicsDevice.Viewport.Width - 99; x += 100)
                 {
                     bool isOccupied = false;
-                    for (int i = 0; i < forms.Count; i++)
+                    for (int i = 0; i < _forms.Count; i++)
                     {
-                        if (forms[i] != form && !forms[i].IsDisposed && forms[i].Visible &&
-                            forms[i].Position.X == x && forms[i].Position.Y == y)
+                        if (_forms[i] != form && !_forms[i].IsDisposed && _forms[i].Visible &&
+                            _forms[i].Position.X == x && _forms[i].Position.Y == y)
                         {
                             isOccupied = true;
                             break;
@@ -325,19 +324,19 @@ namespace xWinFormsLib
 
         public static Vector2 GetMaximizedSize(Form form)
         {
-            Vector2 maxSize = new Vector2(graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+            Vector2 maxSize = new Vector2(Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height);
 
-            for (int i = 0; i < forms.Count; i++)
-                if (forms[i] != form && !forms[i].IsDisposed && forms[i].Visible && forms[i].State == xWinFormsLib.Form.WindowState.Minimized)
-                    if (forms[i].Top < maxSize.Y)
-                        maxSize.Y = forms[i].Top;
+            for (int i = 0; i < _forms.Count; i++)
+                if (_forms[i] != form && !_forms[i].IsDisposed && _forms[i].Visible && _forms[i].State == xWinFormsLib.Form.WindowState.Minimized)
+                    if (_forms[i].Top < maxSize.Y)
+                        maxSize.Y = _forms[i].Top;
 
             return maxSize;
         }
 
         public static void ShowContextMenu()
         {
-            contextMenu.Open(MouseHelper.Cursor.Position);
+            ContextMenu.Open(MouseHelper.Cursor.Position);
         }
 
         public static void CloseOpenedMenus()
@@ -347,11 +346,11 @@ namespace xWinFormsLib
             //        if (menu.Items[i].SubMenu != null && menu[i].SubMenu.State != SubMenu.MenuState.Closed)
             //            menu.Items[i].SubMenu.Close();
 
-            for (int i = 0; i < forms.Count; i++)
-                if (forms[i].Menu != null)
-                    for (int j = 0; j < forms[i].Menu.Items.Count; j++)
-                        if (forms[i].Menu.Items[j].SubMenu != null && forms[i].Menu.Items[j].SubMenu.State != SubMenu.MenuState.Closed)
-                            forms[i].Menu.Items[j].SubMenu.Close();
+            for (int i = 0; i < _forms.Count; i++)
+                if (_forms[i].Menu != null)
+                    for (int j = 0; j < _forms[i].Menu.Items.Count; j++)
+                        if (_forms[i].Menu.Items[j].SubMenu != null && _forms[i].Menu.Items[j].SubMenu.State != SubMenu.MenuState.Closed)
+                            _forms[i].Menu.Items[j].SubMenu.Close();
         }
 
         public static void FocusNext()
@@ -360,21 +359,21 @@ namespace xWinFormsLib
 
         public static bool IsObstructed(Control control, Point location)
         {
-            for (int i = 0; i < forms.Count; i++)
+            for (int i = 0; i < _forms.Count; i++)
             {
-                if (control.Owner != null && forms[i] != control.Owner)
+                if (control.Owner != null && _forms[i] != control.Owner)
                 {
-                    if (forms[i].area.Contains(control.area) || forms[i].area.Intersects(control.area))
+                    if (_forms[i].area.Contains(control.area) || _forms[i].area.Intersects(control.area))
                     {
-                        if (forms[i].area.Contains(location))
+                        if (_forms[i].area.Contains(location))
                             return true;
                     }
                 }
                 else if (control.Owner == null)
                 {
-                    if (forms[i].area.Contains(control.area) || forms[i].area.Intersects(control.area))
+                    if (_forms[i].area.Contains(control.area) || _forms[i].area.Intersects(control.area))
                     {
-                        if (forms[i].area.Contains(location))
+                        if (_forms[i].area.Contains(location))
                             return true;
                     }
                 }
@@ -386,21 +385,21 @@ namespace xWinFormsLib
         private void Form_SizeChanged(object obj, EventArgs e)
         {
             Rectangle area = 
-                new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
+                new Rectangle(0, 0, Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height);
 
-            foreach (Form form in forms)
+            foreach (Form form in _forms)
             {
                 //If a form is ouf of the working area,
                 //we need to put it back where the user can see it.
                 if (!area.Contains(form.area))
                 {
-                    if (form.Position.X + form.Width > graphics.GraphicsDevice.Viewport.Width)
-                        form.X = graphics.GraphicsDevice.Viewport.Width - form.Size.X;
+                    if (form.Position.X + form.Width > Graphics.GraphicsDevice.Viewport.Width)
+                        form.X = Graphics.GraphicsDevice.Viewport.Width - form.Size.X;
                     //else if (form.Position.X + form.Width < 0)
                     //    form.X = 0;
                     
-                    if (form.Position.Y + form.Height > graphics.GraphicsDevice.Viewport.Height)
-                        form.Y = graphics.GraphicsDevice.Viewport.Height - form.Size.Y;
+                    if (form.Position.Y + form.Height > Graphics.GraphicsDevice.Viewport.Height)
+                        form.Y = Graphics.GraphicsDevice.Viewport.Height - form.Size.Y;
                     //else if (form.Position.Y + form.Width < 0)
                     //    form.Y = 0;
                 }
@@ -409,12 +408,12 @@ namespace xWinFormsLib
                 if (form.State == xWinFormsLib.Form.WindowState.Maximized)
                 {
                     //resize it
-                    form.Width = graphics.GraphicsDevice.Viewport.Width;
-                    form.Height = graphics.GraphicsDevice.Viewport.Height;
+                    form.Width = Graphics.GraphicsDevice.Viewport.Width;
+                    form.Height = Graphics.GraphicsDevice.Viewport.Height;
 
                     //if the window was previously maximized,
                     //we need to reposition the form.
-                    if (window.WindowState == System.Windows.Forms.FormWindowState.Normal)
+                    if (_window.WindowState == System.Windows.Forms.FormWindowState.Normal)
                     {
                         form.X = 0;
                         form.Y = 0;

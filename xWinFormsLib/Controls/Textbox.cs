@@ -70,7 +70,7 @@ namespace xWinFormsLib
         {
             this.Width = width;
             Add(text);
-            cursorLocation.X = this.Text.Length;
+            cursorLocation.X = TextboxText.Length;
         }
         public Textbox(string name, Vector2 position, int width, int height, string text)
             : base(name, position)
@@ -221,7 +221,7 @@ namespace xWinFormsLib
             }
         }
 
-        new public string Text
+        public string TextboxText
         {
             get { return base.Text; }
             set
@@ -237,7 +237,10 @@ namespace xWinFormsLib
         {
             if (!multiline)
             {
-                base.Text = base.Text.Insert(cursorLocation.X, text);
+                if (cursorLocation.X <= Text.Length && Text.Length != 0)
+                    base.Text = base.Text.Insert(cursorLocation.X, text);
+                else
+                    base.Text = text;
                 //cursorLocation.X += text.Length;
             }
             else
@@ -360,7 +363,7 @@ namespace xWinFormsLib
                     }
                     else
                     {
-                        if (!multiline && cursorLocation.X < Text.Length)
+                        if (!multiline && cursorLocation.X < TextboxText.Length)
                             cursorLocation.X += 1;
                         else if (multiline)
                         {
@@ -387,14 +390,14 @@ namespace xWinFormsLib
                     #region Backspace
                     if (!multiline && cursorLocation.X > 0)
                     {
-                        if (cursorLocation.X > 1 && Text.Substring(cursorLocation.X - 2, 2) == "\n")
+                        if (cursorLocation.X > 1 && TextboxText.Substring(cursorLocation.X - 2, 2) == "\n")
                         {
-                            Text = Text.Remove(cursorLocation.X - 2, 2);
+                            TextboxText = TextboxText.Remove(cursorLocation.X - 2, 2);
                             cursorLocation.X -= 2;
                         }
                         else
                         {
-                            Text = Text.Remove(cursorLocation.X - 1, 1);
+                            TextboxText = TextboxText.Remove(cursorLocation.X - 1, 1);
                             cursorLocation.X -= 1;
                         }
                     }
@@ -420,12 +423,12 @@ namespace xWinFormsLib
                     break;
                 case Keys.Delete:
                     #region Delete
-                    if (!multiline && cursorLocation.X < Text.Length)
+                    if (!multiline && cursorLocation.X < TextboxText.Length)
                     {
-                        if (cursorLocation.X < Text.Length - 1 && Text.Substring(cursorLocation.X, 2) == "\n")
-                            Text = Text.Remove(cursorLocation.X, 2);
+                        if (cursorLocation.X < TextboxText.Length - 1 && TextboxText.Substring(cursorLocation.X, 2) == "\n")
+                            TextboxText = TextboxText.Remove(cursorLocation.X, 2);
                         else
-                            Text = Text.Remove(cursorLocation.X, 1);
+                            TextboxText = TextboxText.Remove(cursorLocation.X, 1);
                     }
                     else if (multiline)
                     {
@@ -451,7 +454,7 @@ namespace xWinFormsLib
                     break;
                 case Keys.End:
                     if (!multiline)
-                        cursorLocation.X = Text.Length;
+                        cursorLocation.X = TextboxText.Length;
                     else
                     {
                         if (args.ControlDown)
@@ -812,9 +815,9 @@ namespace xWinFormsLib
 
             if (!multiline)
             {
-                cursorOffset.X = Font.MeasureString(Text.Substring(0, cursorLocation.X)).X + 4f;
+                cursorOffset.X = Font.MeasureString(TextboxText.Substring(0, cursorLocation.X)).X + 4f;
                 cursorOffset.Y = 1f;
-                spriteBatch.DrawString(Font, Text, textOffset - scrollOffset, ForeColor);
+                spriteBatch.DrawString(Font, TextboxText, textOffset - scrollOffset, ForeColor);
                 if (hasFocus && !locked && bCursorVisible && Owner == FormCollection.TopMostForm)
                     spriteBatch.DrawString(cursorFont, "|", cursorOffset - scrollOffset, Color.Black);
             }

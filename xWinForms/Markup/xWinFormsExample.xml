@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FormCollection xmlns="http://tempuri.org/Markup.xsd">
+  <Form id="myForm" size="600,400" position="30,30" title="Yo Dawg" style="Sizable">
+
+    <Label id="mylabel" position="15,135" width="130" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1" position="310,50" width="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+    
+  </Form>
+</FormCollection>
