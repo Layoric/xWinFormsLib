@@ -29,7 +29,8 @@
                   <xs:attribute name="position" type="xs:string" ></xs:attribute>
                   <xs:attribute name="backcolor" type="color"></xs:attribute>
                   <xs:attribute name="forecolor" type="color"></xs:attribute>
-                  <xs:attribute name="width" type="xs:string" ></xs:attribute>
+                  <xs:attribute name="width" type="xs:int" ></xs:attribute>
+                  <xs:attribute name="height" type="xs:int"></xs:attribute>
                 </xs:complexType>
               </xs:element>
               <xs:element name="Button" minOccurs="0">

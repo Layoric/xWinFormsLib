@@ -22,14 +22,11 @@ namespace xWinFormsLib
 
                 foreach (XElement formElement in allMarkedupForms)
                 {
-                    var id = formElement.Attributes("id").First().Value;
-                    var title = formElement.Attributes("title").First().Value;
-                    var posVal = formElement.Attributes("position").First().Value;
-                    var posVector = GetVectorFromPositionAttributeValue(posVal);
-                    var sizeVal = formElement.Attributes("size").First().Value;
-                    var sizeVector = GetVectorFromPositionAttributeValue(sizeVal);
-                    var borderVal = formElement.Attributes("style").First().Value;
-                    var borderStyle = (Form.BorderStyle) Enum.Parse(typeof (Form.BorderStyle), borderVal);
+                    var id = GetId(formElement);
+                    var title = GetTitle(formElement);
+                    var posVector = GetPositionVector2(formElement);
+                    var sizeVector = GetSizeVector2(formElement);
+                    var borderStyle = GetBorderStyle(formElement);
                     var form = new Form(id, title,sizeVector,posVector,borderStyle);
                     ProcessChildNodes(formElement.Descendants(),ref form);
                     formCollection.Add(form);
@@ -60,41 +57,31 @@ namespace xWinFormsLib
                     case ControlType.None:
                         break;
                     case ControlType.Label:
-                        string lblId = element.Attributes("id").First().Value;
-                        string lblPosition = element.Attributes("position").First().Value;
-                        Vector2 lblposVector = GetVectorFromPositionAttributeValue(lblPosition);
-                        string lblwidthVal = element.Attributes("width").First().Value;
-                        int lblwidth = int.Parse(lblwidthVal);
-                        string lblforeColorVal = element.Attributes("forecolor").First().Value;
-                        Color lblforeColor = GetColorFromAttributeValue(lblforeColorVal);
-                        string lblbackColorVal = element.Attributes("backcolor").First().Value;
-                        Color lblbackColor = GetColorFromAttributeValue(lblbackColorVal);
+                        string lblId = GetId(element);
+                        Vector2 lblposVector = GetPositionVector2(element);
+                        var lblwidth = GetWidth(element);
+                        var lblforeColor = GetForeColor(element);
+                        var lblbackColor = GetBackColor(element);
                         string lblbodyVal = element.Value;
-                        string lblalignVal = element.Attributes("alignment").First().Value;
-                        var lblalign = (Label.Align) Enum.Parse(typeof (Label.Align), lblalignVal);
+                        var lblalign = GetAlignment(element);
                         var label = new Label(lblId, lblposVector,
                                               lblbodyVal, lblbackColor, lblforeColor,
                                               lblwidth, lblalign);
                         return label;
                     case ControlType.Textbox:
-                        string txtId = element.Attributes("id").First().Value;
-                        string txtPosition = element.Attributes("position").First().Value;
-                        Vector2 txtposVector = GetVectorFromPositionAttributeValue(txtPosition);
-                        string txtwidthVal = element.Attributes("width").First().Value;
-                        int txtwidth = int.Parse(txtwidthVal);
+                        string txtId = GetId(element);
+                        Vector2 txtposVector = GetPositionVector2(element);
+                        int txtwidth = GetWidth(element);
+                        int txtheight = GetHeight(element);
                         string txtbodyVal = element.Value;
-                        var txtBox = new Textbox(txtId,txtposVector, txtwidth, txtbodyVal);
+                        var txtBox = new Textbox(txtId,txtposVector, txtwidth,txtheight, txtbodyVal);
                         return txtBox;
                     case ControlType.Button:
-                        string btnId = element.Attributes("id").First().Value;
-                        string btnPosition = element.Attributes("position").First().Value;
-                        Vector2 btnposVector = GetVectorFromPositionAttributeValue(btnPosition);
-                        string btnwidthVal = element.Attributes("width").First().Value;
-                        int btnwidth = int.Parse(btnwidthVal);
-                        string btnforeColorVal = element.Attributes("forecolor").First().Value;
-                        Color btnforecolor = GetColorFromAttributeValue(btnforeColorVal);
-                        string btnbackColorVal = element.Attributes("backcolor").First().Value;
-                        Color btnbackColor = GetColorFromAttributeValue(btnbackColorVal);
+                        string btnId = GetId(element);
+                        Vector2 btnposVector = GetPositionVector2(element);
+                        int btnwidth = GetWidth(element);
+                        Color btnforecolor = GetForeColor(element);
+                        Color btnbackColor = GetBackColor(element);
                         string btnbodyVal = element.Value;
                         var button = new Button(btnId, btnposVector, btnwidth, btnbodyVal, btnbackColor, btnforecolor);
                         return button;
@@ -104,6 +91,74 @@ namespace xWinFormsLib
             }
 
             throw new IndexOutOfRangeException("No type matching name '" + controlType + "' found");
+        }
+
+        private static int GetHeight(XElement element)
+        {
+            string heightVal = element.Attributes("height").First().Value;
+            int width = int.Parse(heightVal);
+            return width;
+        }
+
+        private static Label.Align GetAlignment(XElement element)
+        {
+            string alignVal = element.Attributes("alignment").First().Value;
+            var align = (Label.Align) Enum.Parse(typeof (Label.Align), alignVal);
+            return align;
+        }
+
+        private static Color GetBackColor(XElement element)
+        {
+            string backColorVal = element.Attributes("backcolor").First().Value;
+            Color backColor = GetColorFromAttributeValue(backColorVal);
+            return backColor;
+        }
+
+        private static Color GetForeColor(XElement element)
+        {
+            string foreColorVal = element.Attributes("forecolor").First().Value;
+            Color foreColor = GetColorFromAttributeValue(foreColorVal);
+            return foreColor;
+        }
+
+        private static int GetWidth(XElement element)
+        {
+            string widthVal = element.Attributes("width").First().Value;
+            int width = int.Parse(widthVal);
+            return width;
+        }
+
+        private static Form.BorderStyle GetBorderStyle(XElement formElement)
+        {
+            var borderVal = formElement.Attributes("style").First().Value;
+            var borderStyle = (Form.BorderStyle)Enum.Parse(typeof(Form.BorderStyle), borderVal);
+            return borderStyle;
+        }
+
+        private static string GetId(XElement formElement)
+        {
+            var id = formElement.Attributes("id").First().Value;
+            return id;
+        }
+
+        private static string GetTitle(XElement formElement)
+        {
+            var title = formElement.Attributes("title").First().Value;
+            return title;
+        }
+
+        private static Vector2 GetPositionVector2(XElement formElement)
+        {
+            var posVal = formElement.Attributes("position").First().Value;
+            var posVector = GetVectorFromPositionAttributeValue(posVal);
+            return posVector;
+        }
+
+        private static Vector2 GetSizeVector2(XElement formElement)
+        {
+            var sizeVal = formElement.Attributes("size").First().Value;
+            var sizeVector = GetVectorFromPositionAttributeValue(sizeVal);
+            return sizeVector;
         }
 
         private static Vector2 GetVectorFromPositionAttributeValue(string value)
@@ -116,14 +171,14 @@ namespace xWinFormsLib
 
         private static Color GetColorFromAttributeValue(string value)
         {
-            Type myType = typeof (Color);
+            Type myType = typeof(Color);
             PropertyInfo[] properties = myType.GetProperties(
                 BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
 
             IEnumerable<PropertyInfo> colorProps =
-                properties.Where(x => x.PropertyType == typeof (Color) && x.Name == value);
+                properties.Where(x => x.PropertyType == typeof(Color) && x.Name == value);
 
-            return (Color) colorProps.First().GetValue(myType, null);
+            return (Color)colorProps.First().GetValue(myType, null);
         }
     }
 
