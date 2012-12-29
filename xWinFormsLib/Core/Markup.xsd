@@ -9,39 +9,40 @@
   <xs:element name="FormCollection">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="Form">
+        <xs:element name="Form" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
             <xs:sequence>
               <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element name="Label" minOccurs="0">
-                <xs:complexType mixed="true">
-                  <xs:attribute name="id" type="xs:string" ></xs:attribute>
-                  <xs:attribute name="position" type="xs:string" ></xs:attribute>
-                  <xs:attribute name="backcolor" type="color"></xs:attribute>
-                  <xs:attribute name="forecolor" type="color"></xs:attribute>
-                  <xs:attribute name="width" type="xs:string" ></xs:attribute>
-                  <xs:attribute name="alignment" type="xs:string" ></xs:attribute>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="Textbox" minOccurs="0">
-                <xs:complexType mixed="true">
-                  <xs:attribute name="id" type="xs:string"></xs:attribute>
-                  <xs:attribute name="position" type="xs:string" ></xs:attribute>
-                  <xs:attribute name="backcolor" type="color"></xs:attribute>
-                  <xs:attribute name="forecolor" type="color"></xs:attribute>
-                  <xs:attribute name="width" type="xs:int" ></xs:attribute>
-                  <xs:attribute name="height" type="xs:int"></xs:attribute>
-                </xs:complexType>
-              </xs:element>
-              <xs:element name="Button" minOccurs="0">
-                <xs:complexType mixed="true">
-                  <xs:attribute name="id" type="xs:string"></xs:attribute>
-                  <xs:attribute name="position" type="xs:string" ></xs:attribute>
-                  <xs:attribute name="backcolor" type="color"></xs:attribute>
-                  <xs:attribute name="forecolor" type="color"></xs:attribute>
-                  <xs:attribute name="width" type="xs:string" ></xs:attribute>
-                </xs:complexType>
-              </xs:element>
+                <xs:element ref="Menu" minOccurs="0" maxOccurs="1"></xs:element>
+                <xs:element name="Label" minOccurs="0">
+                  <xs:complexType mixed="true">
+                    <xs:attribute name="id" type="xs:string" ></xs:attribute>
+                    <xs:attribute name="position" type="xs:string" ></xs:attribute>
+                    <xs:attribute name="backcolor" type="color"></xs:attribute>
+                    <xs:attribute name="forecolor" type="color"></xs:attribute>
+                    <xs:attribute name="width" type="xs:string" ></xs:attribute>
+                    <xs:attribute name="alignment" type="xs:string" ></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Textbox" minOccurs="0">
+                  <xs:complexType mixed="true">
+                    <xs:attribute name="id" type="xs:string"></xs:attribute>
+                    <xs:attribute name="position" type="xs:string" ></xs:attribute>
+                    <xs:attribute name="backcolor" type="color"></xs:attribute>
+                    <xs:attribute name="forecolor" type="color"></xs:attribute>
+                    <xs:attribute name="width" type="xs:int" ></xs:attribute>
+                    <xs:attribute name="height" type="xs:int"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Button" minOccurs="0">
+                  <xs:complexType mixed="true">
+                    <xs:attribute name="id" type="xs:string"></xs:attribute>
+                    <xs:attribute name="position" type="xs:string" ></xs:attribute>
+                    <xs:attribute name="backcolor" type="color"></xs:attribute>
+                    <xs:attribute name="forecolor" type="color"></xs:attribute>
+                    <xs:attribute name="width" type="xs:string" ></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
               </xs:choice>
             </xs:sequence>
             <xs:attribute name="id"></xs:attribute>
@@ -68,4 +69,27 @@
       <xs:enumeration value="White"></xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
+  <xs:element name="SubMenu" id="SubMenu">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="SubMenu" minOccurs="0" maxOccurs="unbounded"></xs:element>
+        <xs:element ref="MenuItem" minOccurs="0" maxOccurs="unbounded"></xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string"></xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MenuItem" id="MenuItem">
+    <xs:complexType mixed="true">
+      <xs:attribute name="id" type="xs:string"></xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Menu" id="Menu">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SubMenu" minOccurs="0" maxOccurs="unbounded"></xs:element>
+        <xs:element ref="MenuItem" minOccurs="0" maxOccurs="unbounded"></xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string"></xs:attribute>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

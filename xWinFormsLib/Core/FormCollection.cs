@@ -5,6 +5,7 @@ Edited 24/12/2012 - layoric@gmail.com
 */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WinForms = System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,11 +49,7 @@ namespace xWinFormsLib
         {
             get
             {
-                int count = 0;
-                for (int i = 0; i < _forms.Count; i++)
-                    if (!_forms[i].IsDisposed && _forms[i].Visible)
-                        count++;
-                return count;
+                return _forms.Count(t => !t.IsDisposed && t.Visible);
             }
         }
 
@@ -105,13 +102,7 @@ namespace xWinFormsLib
         public Form this[string name]
         {
             get
-            {
-                for (int i = 0; i < _forms.Count; i++)
-                    if (_forms[i].Name == name)
-                        return _forms[i];
-
-                return null;
-            }
+            { return _forms.FirstOrDefault(t => t.Name == name); }
             set
             {
                 for (int i = 0; i < _forms.Count; i++)
@@ -124,11 +115,7 @@ namespace xWinFormsLib
         }
         static public Form Form(string name)
         {
-            for (int i = 0; i < _forms.Count; i++)
-                if (_forms[i].Name == name)
-                    return _forms[i];
-
-            return null;
+            return _forms.FirstOrDefault(t => t.Name == name);
         }
 
         /// <summary>
@@ -292,27 +279,19 @@ namespace xWinFormsLib
             #endregion
         }
 
-        public static Nullable<Vector2> GetMinimizedPosition(Form form)
+        public static Vector2? GetMinimizedPosition(Form form)
         {
-            for (int i = 0; i < _forms.Count; i++)
-                if (_forms[i] != form && _forms[i].IsMinimizing)
-                    return null;
+            if (_forms.Any(t => t != form && t.IsMinimizing))
+            {
+                return null;
+            }
 
             //using MinimumSize from the Form Class (100 by 40)
             for (int y = Graphics.GraphicsDevice.Viewport.Height - 20; y > 0; y -= 20)
             {
                 for (int x = 0; x < Graphics.GraphicsDevice.Viewport.Width - 99; x += 100)
                 {
-                    bool isOccupied = false;
-                    for (int i = 0; i < _forms.Count; i++)
-                    {
-                        if (_forms[i] != form && !_forms[i].IsDisposed && _forms[i].Visible &&
-                            _forms[i].Position.X == x && _forms[i].Position.Y == y)
-                        {
-                            isOccupied = true;
-                            break;
-                        }
-                    }
+                    bool isOccupied = _forms.Any(t => t != form && !t.IsDisposed && t.Visible && t.Position.X == x && t.Position.Y == y);
 
                     if (!isOccupied)
                         return new Vector2(x, y);

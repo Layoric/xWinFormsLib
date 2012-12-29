@@ -4,6 +4,7 @@ Eric Grossinger - ericgrossinger@gmail.com
 */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,13 +37,7 @@ namespace xWinFormsLib
         public Control this[string name]
         {
             get
-            {
-                for (int i = 0; i < controls.Count; i++)
-                    if (controls[i].Name == name)
-                        return controls[i];
-
-                return null;
-            }
+            { return controls.FirstOrDefault(t => t.Name == name); }
             set
             {
                 for (int i = 0; i < controls.Count; i++)

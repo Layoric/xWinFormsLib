@@ -342,12 +342,14 @@ namespace xWinFormsLib
             border = new Border(borderName, BackColor, style == BorderStyle.Sizable);
             border.Initialize(content, FormCollection.Graphics.GraphicsDevice);
 
+
+
             InitializeButtons();
 
             for (int i = 0; i < controls.Count; i++)
             {
                 #region Initalize the control's font first
-                if (controls[i].FontName == "" || controls[i].FontName == null)
+                if (string.IsNullOrEmpty(controls[i].FontName))
                     controls[i].FontName = fontName;    
                 controls[i].Font = content.Load<SpriteFont>(@"fonts\" + controls[i].FontName);
                 #endregion
@@ -370,18 +372,16 @@ namespace xWinFormsLib
         private void InitializeButtons()
         {
             btClose = new Button("btMinimize", new Vector2(Size.X - 22f, 4f),
-                @"textures\controls\button\close", 1f, buttonColor);
+                @"textures\controls\button\close", 1f, buttonColor) {Owner = this};
 
-            btClose.Owner = this;            
             btClose.Initialize(content, FormCollection.Graphics.GraphicsDevice);
             btClose.OnRelease += FormClose;
 
             if (hasMinimizeButton)
             {
                 btMinimize = new Button("btMinimize", Vector2.Zero,
-                    @"textures\controls\button\minimize", 1f, buttonColor);
+                    @"textures\controls\button\minimize", 1f, buttonColor) {Owner = this};
 
-                btMinimize.Owner = this;
                 btMinimize.Initialize(content, FormCollection.Graphics.GraphicsDevice);
                 btMinimize.OnRelease += FormMinimize;
 
@@ -390,9 +390,8 @@ namespace xWinFormsLib
             if (hasMaximizeButton)
             {
                 btMaximize = new Button("btMaximize", Vector2.Zero,
-                    @"textures\controls\button\maximize", 1f, buttonColor);
+                    @"textures\controls\button\maximize", 1f, buttonColor) {Owner = this};
 
-                btMaximize.Owner = this;
                 btMaximize.Initialize(content, FormCollection.Graphics.GraphicsDevice);
                 btMaximize.OnRelease += FormMaximize;
             }
@@ -400,9 +399,8 @@ namespace xWinFormsLib
             if (hasMinimizeButton || hasMaximizeButton)
             {
                 btRestore = new Button("btRestore", Vector2.Zero,
-                    @"textures\controls\button\restore", 1f, buttonColor);
+                    @"textures\controls\button\restore", 1f, buttonColor) {Owner = this};
 
-                btRestore.Owner = this;
                 btRestore.Initialize(content, FormCollection.Graphics.GraphicsDevice);
                 btRestore.OnRelease += FormRestore;
             }

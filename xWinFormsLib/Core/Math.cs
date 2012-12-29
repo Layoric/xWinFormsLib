@@ -3,12 +3,11 @@ xWinForms © 2007-2009
 Eric Grossinger - ericgrossinger@gmail.com
 */
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace xWinFormsLib
 {
-    class Math
+    static class Math
     {
         public static float GetAngleFrom2DVectors(Vector2 OriginLoc, Vector2 TargetLoc, bool bRadian)
         {
@@ -41,7 +40,7 @@ namespace xWinFormsLib
             if (bRadian)
                 Angle = MathHelper.ToRadians(System.Convert.ToSingle(Angle));
 
-            return System.Convert.ToSingle(Angle);
+            return Convert.ToSingle(Angle);
         }
     }
 }

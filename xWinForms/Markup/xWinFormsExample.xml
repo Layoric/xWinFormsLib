@@ -1,6 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FormCollection xmlns="http://tempuri.org/Markup.xsd">
   <Form id="myForm" size="600,400" position="30,30" title="Yo Dawg" style="Sizable">
+    <Menu id="test">
+      <SubMenu id="te">Fluff
+        <MenuItem id="menuItem1">
+          Fool
+        </MenuItem>
+      </SubMenu>
+      <SubMenu id="te1">
+        tttt
+        <SubMenu id="te">
+          Fluff
+          <MenuItem id="menuItem11">
+          rrrr
+        </MenuItem>
+        </SubMenu>
+      </SubMenu>
+    </Menu>
+    <Label id="mylabel" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel1" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox11" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button11" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove1" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd1" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel11" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox111" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button111" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove11" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd11" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+
+    <Label id="mylabel2" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox12" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button12" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove2" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd2" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel12" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove12" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd12" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel112" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove112" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd112" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+    
+  </Form>
+  <Form id="myForm2" size="600,400" position="30,30" title="Yo Dawg 222" style="Sizable">
 
     <Label id="mylabel" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
 
@@ -8,6 +69,134 @@
     <Button id="button1" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
     <Button id="btRemove" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
     <Button id="btAdd" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
-    
+
+    <Label id="mylabel1" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox11" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button11" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove1" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd1" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel11" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox111" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button111" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove11" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd11" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+
+    <Label id="mylabel2" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox12" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button12" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove2" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd2" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel12" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove12" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd12" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel112" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove112" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd112" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+  </Form>
+  <Form id="myForm3" size="600,400" position="30,30" title="Yo Dawg" style="Sizable">
+
+    <Label id="mylabel" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel1" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox11" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button11" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove1" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd1" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel11" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox111" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button111" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove11" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd11" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+
+    <Label id="mylabel2" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox12" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button12" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove2" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd2" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel12" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove12" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd12" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel112" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove112" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd112" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+  </Form>
+  <Form id="myForm4" size="600,400" position="30,30" title="Yo Dawg 222" style="Sizable">
+
+    <Label id="mylabel" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel1" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox11" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button11" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove1" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd1" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel11" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox111" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button111" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove11" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd11" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+
+    <Label id="mylabel2" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox12" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button12" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove2" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd2" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel12" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove12" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd12" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
+    <Label id="mylabel112" position="15,135" width="70" backcolor="White" forecolor="Black" alignment="Left">Label #1</Label>
+
+    <Textbox id="textbox1112" position="310,50" width="130" height="80" backcolor="White" forecolor="Black">This is a test</Textbox>
+    <Button id="button1112" position="15,30" width="130" backcolor="White" forecolor="Black">Button1</Button>
+    <Button id="btRemove112" position="15,320" width="60" backcolor="White" forecolor="Black">Remove Listbox Item</Button>
+    <Button id="btAdd112" position="440,100" width="100" backcolor="White" forecolor="Black">Add to Listbox</Button>
+
   </Form>
 </FormCollection>

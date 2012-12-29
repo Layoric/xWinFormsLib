@@ -95,7 +95,7 @@ namespace xWinFormsLib
 
         public override void Dispose()
         {
-            pixelTex.Dispose();
+            if (pixelTex != null) pixelTex.Dispose();
             base.Dispose();
         }
 

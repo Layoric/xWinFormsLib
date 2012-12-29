@@ -36,9 +36,9 @@ namespace xWinFormsLib
 
         private static void ProcessChildNodes(IEnumerable<XElement> elements, ref Form form)
         {
-            foreach (XElement element in elements)
+            foreach (var element in elements)
             {
-                form.Controls.Add(GetControlFromElement(element));
+                AddControl(element, ref form);
                 if (element.HasElements)
                 {
                     ProcessChildNodes(element.Descendants(), ref form);
@@ -46,10 +46,26 @@ namespace xWinFormsLib
             }
         }
 
-        private static Control GetControlFromElement(XElement element)
+        private static void AddControl(XElement element, ref Form form)
         {
             ControlType controlType;
             Enum.TryParse(element.Name.LocalName, true, out controlType);
+            if (controlType != ControlType.None &&
+                controlType != ControlType.Menu &&
+                controlType != ControlType.MenuItem &&
+                controlType != ControlType.SubMenu)
+            {
+                form.Controls.Add(GetControlFromElement(element, controlType));
+            }
+
+            if (controlType == ControlType.Menu)
+            {
+                ConstructMenu(element, ref form);
+            }
+        }
+
+        private static Control GetControlFromElement(XElement element, ControlType controlType)
+        {
             if (controlType != ControlType.None)
             {
                 switch (controlType)
@@ -57,40 +73,130 @@ namespace xWinFormsLib
                     case ControlType.None:
                         break;
                     case ControlType.Label:
-                        string lblId = GetId(element);
-                        Vector2 lblposVector = GetPositionVector2(element);
-                        var lblwidth = GetWidth(element);
-                        var lblforeColor = GetForeColor(element);
-                        var lblbackColor = GetBackColor(element);
-                        string lblbodyVal = element.Value;
-                        var lblalign = GetAlignment(element);
-                        var label = new Label(lblId, lblposVector,
-                                              lblbodyVal, lblbackColor, lblforeColor,
-                                              lblwidth, lblalign);
-                        return label;
+                        return CreateLabelFromElement(element);
                     case ControlType.Textbox:
-                        string txtId = GetId(element);
-                        Vector2 txtposVector = GetPositionVector2(element);
-                        int txtwidth = GetWidth(element);
-                        int txtheight = GetHeight(element);
-                        string txtbodyVal = element.Value;
-                        var txtBox = new Textbox(txtId,txtposVector, txtwidth,txtheight, txtbodyVal);
-                        return txtBox;
+                        return CreateTextboxFromElement(element);
                     case ControlType.Button:
-                        string btnId = GetId(element);
-                        Vector2 btnposVector = GetPositionVector2(element);
-                        int btnwidth = GetWidth(element);
-                        Color btnforecolor = GetForeColor(element);
-                        Color btnbackColor = GetBackColor(element);
-                        string btnbodyVal = element.Value;
-                        var button = new Button(btnId, btnposVector, btnwidth, btnbodyVal, btnbackColor, btnforecolor);
-                        return button;
+                        return CreateButtonFromElement(element);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
 
             throw new IndexOutOfRangeException("No type matching name '" + controlType + "' found");
+        }
+
+        private static void ConstructMenu(XElement element, ref Form form)
+        {
+            Menu menu = CreateMenuFromElement(element);
+            ProcessMenuItems(element, menu, ref form);
+            form.Menu = menu;
+        }
+
+        private static Menu CreateMenuFromElement(XElement element)
+        {
+            string id = GetId(element);
+            return new Menu(id);
+        }
+
+        private static void ProcessMenuItems(XElement element, Control parent, ref Form form)
+        {
+            foreach (var node in element.Elements())
+            {
+                var xElement = node as XElement;
+                var subMenuParent = (parent as SubMenu);
+                var menuParent = (parent as Menu);
+                if (xElement != null)
+                {
+                    ControlType controlType;
+                    Enum.TryParse(xElement.Name.LocalName, true, out controlType);
+                    if (controlType == ControlType.MenuItem)
+                    {
+                        if (subMenuParent != null)
+                        {
+                            //TODO work out if the below custom add call is needed/wanted, seems out of place
+                            subMenuParent.Add(CreateMenuItemFromElement(xElement),null);
+                        }
+                        if (menuParent != null)
+                        {
+                            menuParent.Items.Add(CreateMenuItemFromElement(xElement));
+                        }
+                    }
+                    if (controlType == ControlType.SubMenu)
+                    {
+                        if (subMenuParent != null)
+                        {
+                            var subMenu = CreateSubMenuFromElement(xElement, ref form);
+                            subMenuParent.Add(CreateMenuItemFromElement(xElement),subMenu);
+                            ProcessMenuItems(xElement, subMenu, ref form);
+                        }
+                        if (menuParent != null)
+                        {
+                            var subMenu = CreateSubMenuFromElement(xElement, ref form);
+                            menuParent.Add(CreateMenuItemFromElement(xElement), subMenu);
+                            ProcessMenuItems(xElement, subMenu, ref form);
+                        }
+
+                    }
+                }
+                else
+                {
+                    return;
+                }
+                
+            }
+        }
+
+        private static MenuItem CreateMenuItemFromElement(XElement element)
+        {
+            string id = GetId(element);
+            string name = element.FirstNode.ToString().Trim();
+            return new MenuItem(id,name,null); //TODO Bind event, not null
+        }
+
+        private static SubMenu CreateSubMenuFromElement(XElement element, ref Form form)
+        {
+            string id = GetId(element);
+            string name = element.Value;
+            return new SubMenu(form);
+        }
+
+        private static Button CreateButtonFromElement(XElement element)
+        {
+            string btnId = GetId(element);
+            Vector2 btnposVector = GetPositionVector2(element);
+            int btnwidth = GetWidth(element);
+            Color btnforecolor = GetForeColor(element);
+            Color btnbackColor = GetBackColor(element);
+            string btnbodyVal = element.Value;
+            var button = new Button(btnId, btnposVector, btnwidth, btnbodyVal, btnbackColor, btnforecolor);
+            return button;
+        }
+
+        private static Textbox CreateTextboxFromElement(XElement element)
+        {
+            string txtId = GetId(element);
+            Vector2 txtposVector = GetPositionVector2(element);
+            int txtwidth = GetWidth(element);
+            int txtheight = GetHeight(element);
+            string txtbodyVal = element.Value;
+            var txtBox = new Textbox(txtId, txtposVector, txtwidth, txtheight, txtbodyVal);
+            return txtBox;
+        }
+
+        private static Label CreateLabelFromElement(XElement element)
+        {
+            string lblId = GetId(element);
+            Vector2 lblposVector = GetPositionVector2(element);
+            var lblwidth = GetWidth(element);
+            var lblforeColor = GetForeColor(element);
+            var lblbackColor = GetBackColor(element);
+            string lblbodyVal = element.Value;
+            var lblalign = GetAlignment(element);
+            var label = new Label(lblId, lblposVector,
+                                  lblbodyVal, lblbackColor, lblforeColor,
+                                  lblwidth, lblalign);
+            return label;
         }
 
         private static int GetHeight(XElement element)
@@ -187,6 +293,9 @@ namespace xWinFormsLib
         None,
         Label,
         Textbox,
-        Button
+        Button,
+        Menu,
+        SubMenu,
+        MenuItem
     }
 }

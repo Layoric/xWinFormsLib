@@ -6,8 +6,6 @@ using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-using WinForms = System.Windows.Forms;
 using xWinFormsLib;
 
 namespace xWinForms
@@ -79,7 +77,10 @@ namespace xWinForms
 
 
 
-            formCollection["myForm"].Show();
+            //formCollection["myForm"].Show();
+            //formCollection["myForm2"].Show();
+            //formCollection["myForm3"].Show();
+            //formCollection["myForm4"].Show();
             ts = DateTime.Now - start;
 
             start = DateTime.Now;
@@ -165,31 +166,31 @@ namespace xWinForms
             ////Note: inverted process, first create a submenu then add it when creating the menuItem
             //#region Form1 Menu
 
-            //SubMenu mnuFile = new SubMenu(formCollection["form1"]);
-            //mnuFile.Add(new MenuItem("mnuFileClose", "&Close", Form1_mnuFileClose), null);
-            //mnuFile.Add(new MenuItem("", "-", Form1_mnuFileClose), null);
-            //mnuFile.Add(new MenuItem("mnuFileExit", "E&xit", Form1_mnuFileExit), null);
+            SubMenu mnuFile = new SubMenu(formCollection["form1"]);
+            mnuFile.Add(new MenuItem("mnuFileClose", "&Close", Form1_mnuFileClose), null);
+            mnuFile.Add(new MenuItem("", "-", Form1_mnuFileClose), null);
+            mnuFile.Add(new MenuItem("mnuFileExit", "E&xit", Form1_mnuFileExit), null);
 
-            //SubMenu mnuView = new SubMenu(formCollection["form1"]);
-            //mnuView.Add(new MenuItem("mnuViewToggleFS", "&Toggle Fullscreen", Form1_mnuViewToggleFS), null);
+            SubMenu mnuView = new SubMenu(formCollection["form1"]);
+            mnuView.Add(new MenuItem("mnuViewToggleFS", "&Toggle Fullscreen", Form1_mnuViewToggleFS), null);
 
-            //SubMenu mnuTestSubMenu0 = new SubMenu(formCollection["form1"]);
-            //mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
-            //mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
+            SubMenu mnuTestSubMenu0 = new SubMenu(formCollection["form1"]);
+            mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
+            mnuTestSubMenu0.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
 
-            //SubMenu mnuTestSubMenu1 = new SubMenu(formCollection["form1"]);
-            //mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
-            //mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
+            SubMenu mnuTestSubMenu1 = new SubMenu(formCollection["form1"]);
+            mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem0", "SubMenuItem0", null), null);
+            mnuTestSubMenu1.Add(new MenuItem("mnuTestSubItem1", "SubMenuItem1", null), null);
 
-            //SubMenu mnuTest = new SubMenu(formCollection["form1"]);
-            //mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem0", null), mnuTestSubMenu0);
-            //mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem1", null), mnuTestSubMenu1);
-            //mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem2", null), null);
+            SubMenu mnuTest = new SubMenu(formCollection["form1"]);
+            mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem0", null), mnuTestSubMenu0);
+            mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem1", null), mnuTestSubMenu1);
+            mnuTest.Add(new MenuItem("mnuTestItem0", "MenuItem2", null), null);
 
-            //formCollection["form1"].Menu = new Menu("form1Menu");
-            //formCollection["form1"].Menu.Add(new MenuItem("mnuFile", "&File", null), mnuFile);
-            //formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&View", null), mnuView);
-            //formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&Test", null), mnuTest);
+            formCollection["form1"].Menu = new Menu("form1Menu");
+            formCollection["form1"].Menu.Add(new MenuItem("mnuFile", "&File", null), mnuFile);
+            formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&View", null), mnuView);
+            formCollection["form1"].Menu.Add(new MenuItem("mnuView", "&Test", null), mnuTest);
 
             //#endregion
 
