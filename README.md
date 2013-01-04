@@ -41,7 +41,7 @@ For eg, the following markup
 
 would generate
 
-![example xWinForms](https://docs.google.com/folder/d/0B89V3E7BmHRdYWQ2ZjQ0YjMtNzU5ZC00MmJmLWExMmItNzg1NGQ5YTFjMDFi/edit)
+![example xWinForms](http://i.imgur.com/BNIA3.png)
 
 ## In Progress
 
